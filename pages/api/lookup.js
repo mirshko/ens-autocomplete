@@ -1,5 +1,10 @@
-import { normalize } from "eth-ens-namehash";
 import { request } from "graphql-request";
+import uts46 from "idna-uts46-hx";
+
+const normalize = name =>
+  name
+    ? uts46.toUnicode(name, { useStd3ASCII: true, transitional: false })
+    : name;
 
 const ENDPOINT = "https://api.thegraph.com/subgraphs/name/ensdomains/ens";
 

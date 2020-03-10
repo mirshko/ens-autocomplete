@@ -9,8 +9,8 @@
   },
   "dependencies": {
     "@reach/combobox": "^0.8.6",
-    "eth-ens-namehash": "^2.0.8",
     "graphql-request": "^1.8.2",
+    "idna-uts46-hx": "^3.2.2",
     "next": "9.3.0",
     "react": "16.13.0",
     "react-dom": "16.13.0"
