@@ -1,203 +1,180 @@
-import Head from 'next/head'
+import {
+  Combobox,
+  ComboboxInput,
+  ComboboxList,
+  ComboboxOption,
+  ComboboxPopover
+} from "@reach/combobox";
+import Head from "next/head";
+import { useEffect, useState } from "react";
 
-const Home = () => (
-  <div className="container">
-    <Head>
-      <title>Create Next App</title>
-      <link rel="icon" href="/favicon.ico" />
-    </Head>
+const cache = {};
 
-    <main>
-      <h1 className="title">
-        Welcome to <a href="https://nextjs.org">Next.js!</a>
-      </h1>
+async function fetchNames(value) {
+  if (cache[value]) {
+    return Promise.resolve(cache[value]);
+  }
 
-      <p className="description">
-        Get started by editing <code>pages/index.js</code>
-      </p>
+  const res = await fetch("/api/lookup?name=" + value);
 
-      <div className="grid">
-        <a href="https://nextjs.org/docs" className="card">
-          <h3>Documentation &rarr;</h3>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
+  const result = await res.json();
 
-        <a href="https://nextjs.org/learn" className="card">
-          <h3>Learn &rarr;</h3>
-          <p>Learn about Next.js in an interactive course with quizzes!</p>
-        </a>
+  cache[value] = result;
 
-        <a
-          href="https://github.com/zeit/next.js/tree/master/examples"
-          className="card"
-        >
-          <h3>Examples &rarr;</h3>
-          <p>Discover and deploy boilerplate example Next.js projects.</p>
-        </a>
+  return result;
+}
 
-        <a
-          href="https://zeit.co/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          className="card"
-        >
-          <h3>Deploy &rarr;</h3>
-          <p>
-            Instantly deploy your Next.js site to a public URL with ZEIT Now.
-          </p>
-        </a>
+function useENSSearch(searchTerm) {
+  const [names, setNames] = useState([]);
+
+  useEffect(() => {
+    if (searchTerm.trim() !== "") {
+      let isFresh = true;
+
+      fetchNames(searchTerm).then(names => {
+        if (isFresh) setNames(names);
+      });
+
+      return () => (isFresh = false);
+    }
+  }, [searchTerm]);
+
+  return names;
+}
+
+export default function() {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const ensNames = useENSSearch(searchTerm);
+
+  const handleSearchTermChange = event => setSearchTerm(event.target.value);
+
+  return (
+    <div className="container">
+      <Head>
+        <title>ENS Lookup</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      <div className="search">
+        <div>
+          <h1>ENS Lookup</h1>
+
+          <Combobox>
+            <ComboboxInput
+              className="search-input"
+              onChange={handleSearchTermChange}
+              aria-label="ENS Names"
+              placeholder="vitalik.eth"
+            />
+            {ensNames && (
+              <ComboboxPopover className="shadow-popup">
+                {ensNames.length > 0 ? (
+                  <ComboboxList>
+                    {ensNames.map(({ name }) => (
+                      <ComboboxOption key={name} value={name} />
+                    ))}
+                  </ComboboxList>
+                ) : (
+                  <span className="empty">No results found</span>
+                )}
+              </ComboboxPopover>
+            )}
+          </Combobox>
+        </div>
       </div>
-    </main>
 
-    <footer>
-      <a
-        href="https://zeit.co?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Powered by <img src="/zeit.svg" alt="ZEIT Logo" />
-      </a>
-    </footer>
-
-    <style jsx>{`
-      .container {
-        min-height: 100vh;
-        padding: 0 0.5rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      }
-
-      main {
-        padding: 5rem 0;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      }
-
-      footer {
-        width: 100%;
-        height: 100px;
-        border-top: 1px solid #eaeaea;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      footer img {
-        margin-left: 0.5rem;
-      }
-
-      footer a {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      a {
-        color: inherit;
-        text-decoration: none;
-      }
-
-      .title a {
-        color: #0070f3;
-        text-decoration: none;
-      }
-
-      .title a:hover,
-      .title a:focus,
-      .title a:active {
-        text-decoration: underline;
-      }
-
-      .title {
-        margin: 0;
-        line-height: 1.15;
-        font-size: 4rem;
-      }
-
-      .title,
-      .description {
-        text-align: center;
-      }
-
-      .description {
-        line-height: 1.5;
-        font-size: 1.5rem;
-      }
-
-      code {
-        background: #fafafa;
-        border-radius: 5px;
-        padding: 0.75rem;
-        font-size: 1.1rem;
-        font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-          DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
-      }
-
-      .grid {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-wrap: wrap;
-
-        max-width: 800px;
-        margin-top: 3rem;
-      }
-
-      .card {
-        margin: 1rem;
-        flex-basis: 45%;
-        padding: 1.5rem;
-        text-align: left;
-        color: inherit;
-        text-decoration: none;
-        border: 1px solid #eaeaea;
-        border-radius: 10px;
-        transition: color 0.15s ease, border-color 0.15s ease;
-      }
-
-      .card:hover,
-      .card:focus,
-      .card:active {
-        color: #0070f3;
-        border-color: #0070f3;
-      }
-
-      .card h3 {
-        margin: 0 0 1rem 0;
-        font-size: 1.5rem;
-      }
-
-      .card p {
-        margin: 0;
-        font-size: 1.25rem;
-        line-height: 1.5;
-      }
-
-      @media (max-width: 600px) {
-        .grid {
-          width: 100%;
-          flex-direction: column;
+      <style jsx global>{`
+        html,
+        body {
+          padding: 0;
+          margin: 0;
+          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
+            sans-serif;
         }
-      }
-    `}</style>
 
-    <style jsx global>{`
-      html,
-      body {
-        padding: 0;
-        margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-          Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-      }
+        h1 {
+          text-align: center;
+          font-size: 24px;
+          margin-bottom: 40px;
+        }
 
-      * {
-        box-sizing: border-box;
-      }
-    `}</style>
-  </div>
-)
+        .search {
+          display: grid;
+          place-items: center;
+          min-height: 70vh;
+        }
 
-export default Home
+        .search-input {
+          height: 48px;
+          min-width: 200px;
+          border-radius: 10px;
+          border: 3px solid #eee;
+          padding: 4px 16px;
+          line-height: 40px;
+          font-size: 16px;
+          outline: none;
+        }
+        .search-input:focus,
+        .search-input:active {
+          border-color: black;
+        }
+
+        * {
+          box-sizing: border-box;
+        }
+
+        :root {
+          --reach-combobox: 1;
+        }
+
+        .empty {
+          display: block;
+          padding: 4px 16px;
+        }
+
+        [data-reach-combobox-popover] {
+          background: hsla(0, 100%, 100%, 0.99);
+          border: 3px solid #eee;
+          margin-top: 16px;
+          padding: 8px 0;
+          border-radius: 10px;
+        }
+
+        [data-reach-combobox-list] {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+          user-select: none;
+        }
+
+        [data-reach-combobox-option] {
+          cursor: pointer;
+          margin: 0;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+
+          padding: 4px 16px;
+        }
+
+        [data-reach-combobox-option][aria-selected="true"] {
+          background: hsl(211, 10%, 95%);
+        }
+
+        [data-reach-combobox-option]:hover {
+          background: hsl(211, 10%, 92%);
+        }
+
+        [data-reach-combobox-option][aria-selected="true"]:hover {
+          background: hsl(211, 10%, 90%);
+        }
+
+        [data-suggested-value] {
+          font-weight: bold;
+        }
+      `}</style>
+    </div>
+  );
+}
