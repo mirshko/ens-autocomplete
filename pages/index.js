@@ -53,7 +53,7 @@ export default function() {
   return (
     <div className="container">
       <Head>
-        <title>ENS Lookup</title>
+        <title>ENS Autocomplete</title>
         <meta
           name="description"
           content="Twitter like username autocomplete for ENS, Ethereum Name Service"
@@ -66,7 +66,7 @@ export default function() {
 
       <div className="search">
         <div>
-          <h1>ENS Lookup</h1>
+          <h1>ENS Autocomplete</h1>
 
           <Combobox>
             <ComboboxInput
