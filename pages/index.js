@@ -54,6 +54,11 @@ export default function() {
     <div className="container">
       <Head>
         <title>ENS Lookup</title>
+        <meta
+          name="description"
+          content="Twitter like username autocomplete for ENS, Ethereum Name Service"
+        />
+        <meta name="author" content="@mirshko" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
