@@ -1,5 +1,7 @@
 import { request } from "graphql-request";
 
+const normalize = name => new String(name).normalize("NFC");
+
 const ENDPOINT = "https://api.thegraph.com/subgraphs/name/ensdomains/ens";
 
 const QUERY = /* GraphQL */ `
@@ -16,10 +18,8 @@ const QUERY = /* GraphQL */ `
 export default async (req, res) => {
   const { name } = req.query;
 
-  const uncasedName = String(name).toLowerCase();
-
   const VARS = {
-    name: uncasedName
+    name: normalize(name)
   };
 
   try {
