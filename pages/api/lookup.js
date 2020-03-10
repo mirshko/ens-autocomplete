@@ -1,6 +1,5 @@
+import { normalize } from "eth-ens-namehash";
 import { request } from "graphql-request";
-
-const normalize = name => new String(name).normalize("NFC");
 
 const ENDPOINT = "https://api.thegraph.com/subgraphs/name/ensdomains/ens";
 
