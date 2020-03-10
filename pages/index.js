@@ -7,6 +7,7 @@ import {
 } from "@reach/combobox";
 import Head from "next/head";
 import { useEffect, useState } from "react";
+import GitHubCorner from "../components/github-corner";
 
 const cache = {};
 
@@ -55,6 +56,8 @@ export default function() {
         <title>ENS Lookup</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
+      <GitHubCorner />
 
       <div className="search">
         <div>
