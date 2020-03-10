@@ -4,7 +4,7 @@ import { FATHOM_SITE_ID } from "../lib/fathom";
 export default class extends Document {
   render() {
     return (
-      <html>
+      <html lang="en">
         <Head>
           <script
             dangerouslySetInnerHTML={{
