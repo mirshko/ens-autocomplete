@@ -1,10 +1,10 @@
-import Document, { Head, Main, NextScript } from "next/document";
+import Document, { Head, Html, Main, NextScript } from "next/document";
 import { FATHOM_SITE_ID } from "../lib/fathom";
 
 export default class extends Document {
   render() {
     return (
-      <html lang="en">
+      <Html lang="en">
         <Head>
           <script
             dangerouslySetInnerHTML={{
@@ -28,7 +28,7 @@ export default class extends Document {
           <Main />
           <NextScript />
         </body>
-      </html>
+      </Html>
     );
   }
 }
