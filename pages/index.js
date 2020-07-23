@@ -3,7 +3,7 @@ import {
   ComboboxInput,
   ComboboxList,
   ComboboxOption,
-  ComboboxPopover
+  ComboboxPopover,
 } from "@reach/combobox";
 import Head from "next/head";
 import { useEffect, useState } from "react";
@@ -32,7 +32,7 @@ function useENSSearch(searchTerm) {
     if (searchTerm.trim() !== "") {
       let isFresh = true;
 
-      fetchNames(searchTerm).then(names => {
+      fetchNames(searchTerm).then((names) => {
         if (isFresh) setNames(names);
       });
 
@@ -43,12 +43,12 @@ function useENSSearch(searchTerm) {
   return names;
 }
 
-export default function() {
+export default function () {
   const [searchTerm, setSearchTerm] = useState("");
 
   const ensNames = useENSSearch(searchTerm);
 
-  const handleSearchTermChange = event => setSearchTerm(event.target.value);
+  const handleSearchTermChange = (event) => setSearchTerm(event.target.value);
 
   return (
     <div className="container">
@@ -102,6 +102,11 @@ export default function() {
             sans-serif;
         }
 
+        body {
+          background-color: rgb(0, 0, 0);
+          color: #f5f5f7;
+        }
+
         h1 {
           text-align: center;
           font-size: 24px;
@@ -118,15 +123,17 @@ export default function() {
           height: 48px;
           min-width: 200px;
           border-radius: 10px;
-          border: 3px solid #eee;
+          background: rgb(0, 0, 0);
+          border: 3px solid #f5f5f7;
           padding: 4px 16px;
+          color: #f5f5f7;
           line-height: 40px;
           font-size: 16px;
           outline: none;
         }
         .search-input:focus,
         .search-input:active {
-          border-color: black;
+          border-color: hsl(240 11% 70% / 1);
         }
 
         * {
@@ -143,8 +150,8 @@ export default function() {
         }
 
         [data-reach-combobox-popover] {
-          background: hsla(0, 100%, 100%, 0.99);
-          border: 3px solid #eee;
+          background: rgb(0, 0, 0);
+          border: 3px solid #f5f5f7;
           margin-top: 16px;
           padding: 8px 0;
           border-radius: 10px;
@@ -167,16 +174,11 @@ export default function() {
           padding: 4px 16px;
         }
 
-        [data-reach-combobox-option][aria-selected="true"] {
-          background: hsl(211, 10%, 95%);
-        }
-
-        [data-reach-combobox-option]:hover {
-          background: hsl(211, 10%, 92%);
-        }
-
+        [data-reach-combobox-option]:hover,
+        [data-reach-combobox-option][aria-selected="true"],
         [data-reach-combobox-option][aria-selected="true"]:hover {
-          background: hsl(211, 10%, 90%);
+          background: #f5f5f7;
+          color: rgb(0, 0, 0);
         }
 
         [data-suggested-value] {

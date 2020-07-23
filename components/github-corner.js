@@ -20,8 +20,8 @@ const GitHubCorner = () => (
 
     <style jsx>{`
       svg {
-        fill: #000;
-        color: #fff;
+        fill: #f5f5f7;
+        color: #000;
         position: absolute;
         top: 0;
         border: 0;
