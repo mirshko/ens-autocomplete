@@ -11,7 +11,7 @@
     "@reach/combobox": "^0.10.5",
     "graphql-request": "^2.0.0",
     "idna-uts46-hx": "^3.3.0",
-    "next": "^9.4.4",
+    "next": "^11.1.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   }
